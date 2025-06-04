@@ -3,7 +3,25 @@ import java.sql.*;
 
 public class Hello {
     public static void main(String[] args) throws SQLException {
-        deleteLutz();
+        selectPersonalFromVerkauf();
+    }
+
+    public static void selectPersonalFromVerkauf() throws SQLException {
+
+        Connection con = connectToDB();
+        Statement st = con.createStatement();
+        
+        ResultSet rs = st.executeQuery(
+            "SELECT p.vorname, p.name FROM personal as p join abteilung as a ON p.abt_nr = a.abt_nr WHERE a.name = 'Verkauf'");
+    
+        ResultSetMetaData rsmd = rs.getMetaData();
+        int columnsNumber = rsmd.getColumnCount();
+
+        while (rs.next()) {
+            for(int i = 1; i < columnsNumber; i++)
+                System.out.print(rs.getString(i) + " ");
+            System.out.println();
+        }
     }
 
     public static void deleteLutz() throws SQLException {
